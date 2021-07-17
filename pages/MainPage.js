@@ -1,14 +1,27 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView} from 'react-native';
 import data from '../data.json'
+import Card from '../components/Card';
+import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
+import Loading from '../components/Loading';
 export default function MainPage() {
   console.disableYellowBox = true;
 
-  let tip = data.tip;
+  const [state, setState] = useState([]) // state 초기값
+  const [ready, setReady] = useState(true)
+
+  useEffect(()=>{ // 화면이 그려진 다음 실행
+    setTimeout(()=>{ // 1초 뒤에 실행할 함수
+      setState(data)
+      setReady(false)
+    }, 1000)
+  },[])
+
+  let tip = state.tip;
   let todayWeather = 10 + 17;
   let todayCondition = "흐림";
 
-  return (
+  return ready ? <Loading/> : ( // 로딩 or 화면
     <ScrollView style={styles.container}>
       <Text style={styles.title}>나만의 꿀팁</Text>
       <Image
@@ -24,33 +37,7 @@ export default function MainPage() {
       <View  style={styles.descContainer}>
       {
         tip.map((content, i)=>{
-          return i % 2 == 0 ? (
-          <View  style={styles.cardEven}>
-             <Image 
-              style={styles.subImage}
-              source={{uri:content.image}}></Image>
-            <View style={styles.desc}>
-              <Text style={styles.descTitle}>{content.title}</Text>
-              <Text style={styles.descContent} numberOfLines={3}>
-                {content.desc}
-              </Text>
-              <Text style={styles.descPub}>{content.date}</Text>
-            </View>
-          </View>
-          ) : (
-            <View  style={styles.cardOdd}>
-             <Image 
-              style={styles.subImage}
-              source={{uri:content.image}}></Image>
-            <View style={styles.desc}>
-              <Text style={styles.descTitle}>{content.title}</Text>
-              <Text style={styles.descContent} numberOfLines={3}>
-                {content.desc}
-              </Text>
-              <Text style={styles.descPub}>{content.date}</Text>
-            </View>
-          </View>
-          )
+          return (<Card content={content} key={i}/>)
         })
       }
       </View>
@@ -90,45 +77,4 @@ const styles = StyleSheet.create({
     borderWidth:1,
     elevation:3
   },
-  descContainer:{
-    margin:10,
-  },
-  cardEven:{
-    flexDirection:'row',
-    flex:1,
-    margin:5,
-    borderBottomWidth:0.5,
-    borderBottomColor:"#eee",
-    padding:5,
-    borderRadius:10,
-  },
-  cardOdd:{
-    flexDirection:'row',
-    flex:1,
-    margin:5,
-    borderBottomWidth:0.5,
-    borderBottomColor:"#eee",
-    padding:5,
-    backgroundColor:'#dddddd',
-    borderRadius:10,
-  },
-  subImage:{
-    flex:1,
-    marginRight:10,
-    borderRadius:10,
-    resizeMode:'cover'
-  },
-  desc:{
-    flex:2
-  },
-  descTitle:{
-    fontSize:20,
-    fontWeight:'700'
-  },
-  descContent:{
-    fontSize:15
-  },
-  descPub:{
-    fontSize:10
-  }
 })

@@ -16,7 +16,14 @@
     "react-native-web": "~0.13.12"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0"
+    "@babel/core": "^7.9.0",
+    "husky": "^7.0.1",
+    "lint-staged": "^11.0.1"
+  },
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "husky-add-issue-tracker"
+    }
   },
   "private": true
 }
