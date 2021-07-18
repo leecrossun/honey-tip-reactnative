@@ -50,6 +50,7 @@ const link = ()=>{
       <Text style={styles.title}>{tip.title}</Text>
       <Text style={styles.desc}>{tip.desc}</Text>
       </View>
+      <View style={{flexDirection:'row', flexWrap:'wrap'}}>
       <TouchableOpacity onPress={()=>popup()}>
       <Text style={styles.btn} >팁 찜하기</Text>
       </TouchableOpacity>
@@ -59,6 +60,7 @@ const link = ()=>{
       <TouchableOpacity onPress={()=>link()}>
       <Text style={styles.btn} >외부링크</Text>
       </TouchableOpacity>
+      </View>
     </ScrollView>
   )
 

@@ -38,6 +38,9 @@ export default function MainPage({navigation, route}) {
   return ready ? <Loading/> : ( // 로딩 or 화면
     <ScrollView style={styles.container}>
       <StatusBar style='black'/>
+      <TouchableOpacity style={styles.about} onPress={()=>{navigation.navigate('AboutPage')}}>
+        <Text style={styles.category}>소개 페이지</Text>
+      </TouchableOpacity>
       <Image
         style={styles.mainImage} 
         source={{uri:'https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c'}}></Image>
@@ -46,7 +49,7 @@ export default function MainPage({navigation, route}) {
         <TouchableOpacity onPress={()=>{category('생활')}}><Text style={styles.category}>생활</Text></TouchableOpacity>
         <TouchableOpacity onPress={()=>{category('재테크')}}><Text style={styles.category}>재테크</Text></TouchableOpacity>
         <TouchableOpacity onPress={()=>{category('반려견')}}><Text style={styles.category}>반려견</Text></TouchableOpacity>
-        <TouchableOpacity onPress={()=>{category('꿀팁 찜')}}><Text style={styles.category}>꿀팁 찜</Text></TouchableOpacity>
+        <TouchableOpacity onPress={()=>{navigation.navigate('LikePage')}}><Text style={styles.category}>꿀팁 찜</Text></TouchableOpacity>
       </ScrollView>
       <View  style={styles.descContainer}>
       {
@@ -77,12 +80,18 @@ const styles = StyleSheet.create({
     borderRadius:10,
     alignSelf:'center'
   },
+  about:{
+    marginTop:10,
+    marginRight:15,
+    alignItems:'flex-end',
+  },
   scroll:{
     margin:10,
+    alignSelf:'auto'
   },
   category:{
     textAlign:'center',
-    textAlignVertical:'center',
+    padding:15,
     height:50,
     width:100,
     backgroundColor:"#fff",

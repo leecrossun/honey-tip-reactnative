@@ -1,7 +1,12 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView} from 'react-native';
-export default function AboutPage() {
+export default function AboutPage({navigation, route}) {
   console.disableYellowBox = true;
+  useEffect(()=>{
+    navigation.setOptions({
+      title:'소개 페이지'
+    })
+  },[])
   return (
       <View style={styles.container}>
           <View style={styles.topContainer}>
@@ -25,7 +30,7 @@ export default function AboutPage() {
 const styles = StyleSheet.create({
     title:{
         fontSize:30,
-        marginTop:100,
+        marginTop:60,
         textAlign:'center',
         color:'#fff',
         fontWeight:'700'
@@ -35,7 +40,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#4774d9'
     },
     topContainer:{
-        flex:3,
+        flex:2,
         backgroundColor: 'rgba(0,0,0,0.0)',
     },
     bottomContainer:{
