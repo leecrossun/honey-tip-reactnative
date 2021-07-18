@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Alert, Share, Linking} from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView,TouchableOpacity,Alert,Share } from 'react-native';
 import * as Linking from 'expo-linking';
 
 export default function DetailPage({navigation,route}) {
