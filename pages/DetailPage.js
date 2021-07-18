@@ -1,5 +1,7 @@
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Alert} from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView,TouchableOpacity,Alert,Share } from 'react-native';
+import * as Linking from 'expo-linking';
+
 export default function DetailPage({navigation,route}) {
   console.disableYellowBox = true;
   const [tip, setTip] = useState({
@@ -31,6 +33,16 @@ useEffect(()=>{
 const popup = ()=>{
   Alert.alert("popoup!")
 }
+
+const share = ()=>{
+  Share.share({
+      message:`${tip.title} \n\n ${tip.desc} \n\n ${tip.image}`,
+  });
+}
+
+const link = ()=>{
+  Linking.openURL("https://codingexplore.tistory.com/")
+}
   return (
     <ScrollView style={styles.container}>
       <Image style={styles.image} source={{uri:tip.image}}/>
@@ -40,6 +52,12 @@ const popup = ()=>{
       </View>
       <TouchableOpacity onPress={()=>popup()}>
       <Text style={styles.btn} >팁 찜하기</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={()=>share()}>
+      <Text style={styles.btn} >팁 공유하기</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={()=>link()}>
+      <Text style={styles.btn} >외부링크</Text>
       </TouchableOpacity>
     </ScrollView>
   )
