@@ -1,12 +1,13 @@
 import React from "react"
-import {View,Text,Image,StyleSheet} from "react-native";
+import {View,Text,Image,StyleSheet, TouchableOpacity} from "react-native";
 
 //비구조 할당 방식으로 넘긴 속성 데이터를 꺼내 사용함
-export default function Card({content}) {
-    return (<View  style={styles.cardEven}>
+export default function Card({content, navigation}) {
+    return (
+    <TouchableOpacity  style={styles.cardEven} onPress={()=>{navigation.navigate('DetailPage',content)}}>
         <Image 
          style={styles.subImage}
-         source={{uri:content.image}}></Image>
+         source={{uri:content.image}} />
        <View style={styles.desc}>
          <Text style={styles.descTitle}>{content.title}</Text>
          <Text style={styles.descContent} numberOfLines={3}>
@@ -14,7 +15,7 @@ export default function Card({content}) {
          </Text>
          <Text style={styles.descPub}>{content.date}</Text>
        </View>
-     </View>)
+     </TouchableOpacity>)
 }
 
 const styles = StyleSheet.create({

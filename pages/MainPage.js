@@ -4,7 +4,7 @@ import data from '../data.json'
 import Card from '../components/Card';
 import Loading from '../components/Loading';
 import { StatusBar } from 'expo-status-bar';
-export default function MainPage() {
+export default function MainPage({navigation, route}) {
   console.disableYellowBox = true;
 
   const [state, setState] = useState([]) // state 초기값
@@ -13,6 +13,9 @@ export default function MainPage() {
 
   useEffect(()=>{
     setTimeout(()=>{
+      navigation.setOptions({
+        title:'나만의 꿀팁'
+      })
       let tip = data.tip
       setState(tip)
       setCateState(tip)
@@ -35,7 +38,6 @@ export default function MainPage() {
   return ready ? <Loading/> : ( // 로딩 or 화면
     <ScrollView style={styles.container}>
       <StatusBar style='black'/>
-      <Text style={styles.title}>나만의 꿀팁</Text>
       <Image
         style={styles.mainImage} 
         source={{uri:'https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c'}}></Image>
@@ -49,7 +51,7 @@ export default function MainPage() {
       <View  style={styles.descContainer}>
       {
         cateState.map((content, i)=>{
-          return (<Card content={content} key={i}/>)
+          return (<Card content={content} key={i} navigation={navigation} />)
         })
       }
       </View>
