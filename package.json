@@ -20,10 +20,5 @@
     "husky": "^7.0.1",
     "lint-staged": "^11.0.1"
   },
-  "husky": {
-    "hooks": {
-      "prepare-commit-msg": "husky-add-issue-tracker"
-    }
-  },
   "private": true
 }

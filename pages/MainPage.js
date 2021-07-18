@@ -2,41 +2,53 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView} from 'react-native';
 import data from '../data.json'
 import Card from '../components/Card';
-import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 import Loading from '../components/Loading';
+import { StatusBar } from 'expo-status-bar';
 export default function MainPage() {
   console.disableYellowBox = true;
 
   const [state, setState] = useState([]) // state 초기값
+  const [cateState, setCateState] = useState([])
   const [ready, setReady] = useState(true)
 
-  useEffect(()=>{ // 화면이 그려진 다음 실행
-    setTimeout(()=>{ // 1초 뒤에 실행할 함수
-      setState(data)
+  useEffect(()=>{
+    setTimeout(()=>{
+      let tip = data.tip
+      setState(tip)
+      setCateState(tip)
       setReady(false)
     }, 1000)
   },[])
 
-  let tip = state.tip;
+  const category = (cate) => {
+    if(cate == "전체보기"){
+        setCateState(state)
+    }else{
+        setCateState(state.filter((d)=>{
+            return d.category == cate
+        }))
+    }
+}
   let todayWeather = 10 + 17;
   let todayCondition = "흐림";
 
   return ready ? <Loading/> : ( // 로딩 or 화면
     <ScrollView style={styles.container}>
+      <StatusBar style='black'/>
       <Text style={styles.title}>나만의 꿀팁</Text>
       <Image
         style={styles.mainImage} 
         source={{uri:'https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c'}}></Image>
       <ScrollView horizontal={true} style={styles.scroll} >
-        <TouchableOpacity><Text style={styles.category}>생활</Text></TouchableOpacity>
-        <TouchableOpacity><Text style={styles.category}>재테크</Text></TouchableOpacity>
-        <TouchableOpacity><Text style={styles.category}>반려견</Text></TouchableOpacity>
-        <TouchableOpacity><Text style={styles.category}>꿀팁</Text></TouchableOpacity>
-        <TouchableOpacity><Text style={styles.category}>찜</Text></TouchableOpacity>
+      <TouchableOpacity onPress={()=>{category('전체보기')}}><Text style={styles.category}>전체보기</Text></TouchableOpacity>
+        <TouchableOpacity onPress={()=>{category('생활')}}><Text style={styles.category}>생활</Text></TouchableOpacity>
+        <TouchableOpacity onPress={()=>{category('재테크')}}><Text style={styles.category}>재테크</Text></TouchableOpacity>
+        <TouchableOpacity onPress={()=>{category('반려견')}}><Text style={styles.category}>반려견</Text></TouchableOpacity>
+        <TouchableOpacity onPress={()=>{category('꿀팁 찜')}}><Text style={styles.category}>꿀팁 찜</Text></TouchableOpacity>
       </ScrollView>
       <View  style={styles.descContainer}>
       {
-        tip.map((content, i)=>{
+        cateState.map((content, i)=>{
           return (<Card content={content} key={i}/>)
         })
       }
