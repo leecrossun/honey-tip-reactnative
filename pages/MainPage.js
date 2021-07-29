@@ -1,15 +1,22 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Alert} from 'react-native';
 import data from '../data.json'
 import Card from '../components/Card';
 import Loading from '../components/Loading';
 import { StatusBar } from 'expo-status-bar';
+import * as Location from "expo-location";
+import axios from "axios"
+
 export default function MainPage({navigation, route}) {
   console.disableYellowBox = true;
 
   const [state, setState] = useState([]) // state 초기값
   const [cateState, setCateState] = useState([])
   const [ready, setReady] = useState(true)
+  const [weather, setWeather] = useState({
+    temp : 0,
+    condition : ''
+  })
 
   useEffect(()=>{
     setTimeout(()=>{
@@ -19,9 +26,35 @@ export default function MainPage({navigation, route}) {
       let tip = data.tip
       setState(tip)
       setCateState(tip)
+      getLocation()
       setReady(false)
     }, 1000)
   },[])
+
+  const getLocation = async() => {
+    try {
+      await Location.requestPermissionsAsync();
+      const locationData = await Location.getCurrentPositionAsync();
+      const latitude = locationData['coords']['latitude']
+      const longitude = locationData['coords']['longitude']
+      const API_KEY = "cfc258c75e1da2149c33daffd07a911d";
+      const result = await axios.get(
+        `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
+      );
+
+      const temp = result.data.main.temp;
+      const condition = result.data.weather[0].main
+      console.log(temp)
+      console.log(condition)
+
+      setWeather({
+        temp, condition
+      })
+
+    }catch(error) {
+      Alert.alert("위치를 찾을 수가 없습니다.", "앱을 재실행해주세요.")
+    }
+  }
 
   const category = (cate) => {
     if(cate == "전체보기"){
@@ -38,6 +71,7 @@ export default function MainPage({navigation, route}) {
   return ready ? <Loading/> : ( // 로딩 or 화면
     <ScrollView style={styles.container}>
       <StatusBar style='black'/>
+      <Text style={styles.weather}>오늘의 날씨: {weather.temp + '°C   ' + weather.condition} </Text>
       <TouchableOpacity style={styles.about} onPress={()=>{navigation.navigate('AboutPage')}}>
         <Text style={styles.category}>소개 페이지</Text>
       </TouchableOpacity>
@@ -66,6 +100,10 @@ export default function MainPage({navigation, route}) {
 const styles = StyleSheet.create({
   container:{
     backgroundColor:"#fff",
+  },
+  weather:{
+    alignSelf:"flex-end",
+    paddingRight:20
   },
   title:{
     fontSize:20,
