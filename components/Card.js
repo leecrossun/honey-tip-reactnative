@@ -4,7 +4,7 @@ import {View,Text,Image,StyleSheet, TouchableOpacity} from "react-native";
 //비구조 할당 방식으로 넘긴 속성 데이터를 꺼내 사용함
 export default function Card({content, navigation}) {
     return (
-    <TouchableOpacity  style={styles.cardEven} onPress={()=>{navigation.navigate('DetailPage',content)}}>
+    <TouchableOpacity  style={styles.cardEven} onPress={()=>{navigation.navigate('DetailPage',{idx:content.idx})}}>
         <Image 
          style={styles.subImage}
          source={{uri:content.image}} />
