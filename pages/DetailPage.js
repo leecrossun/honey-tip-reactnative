@@ -1,6 +1,8 @@
 import React,{useState,useEffect} from 'react';
 import { StyleSheet, Text, View, Image, ScrollView,TouchableOpacity,Alert,Share } from 'react-native';
 import * as Linking from 'expo-linking';
+import {firebase_db} from "../firebaseConfig";
+import Constants from "expo-constants";
 
 export default function DetailPage({navigation,route}) {
   console.disableYellowBox = true;
@@ -27,11 +29,20 @@ useEffect(()=>{
       },
       headerTintColor: "#fff",
   })
-  setTip(route.params)
+  const { idx } = route.params;
+        firebase_db.ref('/tip/'+idx).once('value').then((snapshot) => {
+            let tip = snapshot.val();
+            setTip(tip)
+        });
+
 },[])
 
-const popup = ()=>{
-  Alert.alert("popoup!")
+const like = () => {
+  const user_id = Constants.installationId;
+  firebase_db.ref('/like/'+user_id+'/'+ tip.idx).set(tip,function(error){
+      console.log(error)
+      Alert.alert("찜 완료!")
+  });
 }
 
 const share = ()=>{
@@ -51,7 +62,7 @@ const link = ()=>{
       <Text style={styles.desc}>{tip.desc}</Text>
       </View>
       <View style={{flexDirection:'row', flexWrap:'wrap'}}>
-      <TouchableOpacity onPress={()=>popup()}>
+      <TouchableOpacity onPress={()=>like()}>
       <Text style={styles.btn} >팁 찜하기</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={()=>share()}>

@@ -5,7 +5,8 @@ import Card from '../components/Card';
 import Loading from '../components/Loading';
 import { StatusBar } from 'expo-status-bar';
 import * as Location from "expo-location";
-import axios from "axios"
+import axios from "axios";
+import {firebase_db} from "../firebaseConfig";
 
 export default function MainPage({navigation, route}) {
   console.disableYellowBox = true;
@@ -23,11 +24,21 @@ export default function MainPage({navigation, route}) {
       navigation.setOptions({
         title:'나만의 꿀팁'
       })
-      let tip = data.tip
-      setState(tip)
-      setCateState(tip)
-      getLocation()
-      setReady(false)
+      firebase_db.ref('/tip').once('value').then((snapshot) => {
+        console.log("파이어베이스에서 데이터 가져왔습니다!!")
+        let tip = snapshot.val();
+        setState(tip)
+        setCateState(tip)
+        getLocation()
+        setReady(false)
+      });
+      // setTimeout(()=>{
+      //     let tip = data.tip;
+      //     setState(tip)
+      //     setCateState(tip)
+      //     getLocation()
+      //     setReady(false)
+      // },500)
     }, 1000)
   },[])
 
